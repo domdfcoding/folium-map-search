@@ -1,0 +1,58 @@
+[build-system]
+requires = [ "whey",]
+build-backend = "whey"
+
+[project]
+name = "folium-map-search"
+version = "0.0.0"
+description = "Adds a control to search for major places on the map and for map markers."
+readme = "README.rst"
+keywords = []
+dynamic = [ "requires-python", "classifiers", "dependencies",]
+
+[project.license]
+file = "LICENSE"
+
+[[project.authors]]
+name = "Dominic Davis-Foster"
+email = "dominic@davis-foster.co.uk"
+
+[project.urls]
+Homepage = "https://github.com/domdfcoding/folium-map-search"
+"Issue Tracker" = "https://github.com/domdfcoding/folium-map-search/issues"
+"Source Code" = "https://github.com/domdfcoding/folium-map-search"
+
+[tool.whey]
+base-classifiers = [ "Typing :: Typed",]
+python-versions = [ "3.9", "3.10", "3.11", "3.12", "3.13",]
+python-implementations = [ "CPython",]
+platforms = [ "Windows", "macOS", "Linux",]
+license-key = "MIT"
+package = "folium_map_search"
+additional-files = [ "include folium_map_search/folium-map-search.js",]
+
+[tool.importcheck]
+
+[tool.mypy]
+python_version = "3.9"
+namespace_packages = true
+check_untyped_defs = true
+warn_unused_ignores = true
+no_implicit_optional = true
+show_error_codes = true
+
+[tool.dependency-dash."requirements.txt"]
+order = 10
+
+[tool.snippet-fmt]
+directives = [ "code-block",]
+
+[tool.snippet-fmt.languages.python]
+reformat = true
+
+[tool.snippet-fmt.languages.TOML]
+reformat = true
+
+[tool.snippet-fmt.languages.ini]
+
+[tool.snippet-fmt.languages.json]
