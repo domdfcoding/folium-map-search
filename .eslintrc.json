@@ -25,6 +25,7 @@
         "no-tabs": 0,
         "space-before-function-paren": 0,
         "comma-dangle": 0,
+        "operator-linebreak": 0,
         "@typescript-eslint/no-unused-vars": [
             "error",
             {
