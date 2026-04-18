@@ -48,26 +48,39 @@ export interface EndpointArgument {
 
 export type MapProviderOptions = {
 	map: L.Map;
-	layer: L.FeatureGroup | L.LayerGroup; // TODO accept MarkerCluster
+	layer: L.FeatureGroup | L.LayerGroup;
+	viewbox: string | null | undefined;
+	featureType: string | null | undefined;
 } & OpenStreetMapProviderOptions;
 
 export default class MapSearchProvider extends GeoSearch.OpenStreetMapProvider {
 	map: L.Map;
 	layer: L.FeatureGroup | L.LayerGroup;
+	viewbox: string | null | undefined;
+	featureType: string | null | undefined;
 
 	constructor(options: MapProviderOptions) {
 		super(options);
 		this.map = options.map;
 		this.layer = options.layer;
+		this.viewbox = options.viewbox;
+		this.featureType = options.featureType;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	endpoint({ query, type }: EndpointArgument): string {
 		const params = typeof query === 'string' ? { q: query } : query;
 		params.format = 'json';
-		params.bounded = '1';
-		params.viewbox = '-7,49,3,55';
-		params.featureType = 'settlement';
+
+		if (this.viewbox){
+			params.bounded = '1';
+			params.viewbox = this.viewbox;
+		}
+
+		if (this.featureType) {
+			params.featureType = this.featureType;
+
+		}
 
 		return this.getUrl(this.searchUrl, params);
 	}

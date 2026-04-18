@@ -57,6 +57,8 @@ class Provider:
 	Base class for all search providers.
 
 	leaflet-geosearch uses so-called "providers" to take care of building the correct service URL and parsing the retrieved data into a uniform format.
+
+	:param \*\*kwargs: Keyword arguments for the javascript ``Provider`` class.
 	"""
 
 	def __init__(self, **kwargs):
@@ -145,6 +147,8 @@ class MapSearchProvider(Provider):
 
 	:param map: The leaflet map.
 	:param layer: The leaflet layer to search.
+	:param viewbox: Optionally filter OpenStreetMap search queries to this bounding box. Format ``<lng1>,<lat1>,<lng2>,<lat2>``.
+	:param feature_type: Optionally filter OpenStreetMap search queries to this feature type, e.g. ``'settlement'``.
 	:param \*\*kwargs: Additional keyword arguments for the javascript ``Provider`` class.
 	"""
 
