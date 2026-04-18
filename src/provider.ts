@@ -15,14 +15,13 @@ export interface EndpointArgument {
 	};
 	type?: RequestType | null;
 }
-// TODO: set map and layer (marker_cluster_nhle) object (or take from the Control) rather than using global variable
 
 export type MapProviderOptions = {
 	map: L.Map;
 	layer: L.FeatureGroup | L.LayerGroup; // TODO accept MarkerCluster
 } & OpenStreetMapProviderOptions;
 
-export default class SearchProvider extends GeoSearch.OpenStreetMapProvider {
+export default class MapSearchProvider extends GeoSearch.OpenStreetMapProvider {
 	map: L.Map;
 	layer: L.FeatureGroup | L.LayerGroup;
 
@@ -83,6 +82,3 @@ export default class SearchProvider extends GeoSearch.OpenStreetMapProvider {
 		return result;
 	}
 }
-
-// TODO: dismiss search box on search or when clicking out of it
-// TODO: disable enter to search

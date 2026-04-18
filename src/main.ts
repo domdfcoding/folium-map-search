@@ -1,5 +1,9 @@
-import SearchProvider from './provider';
-// export { SearchProvider };  // TODO: need better tool than sed to remove multiline exports (ast parser-emitter maybe)
+import MapSearchProvider from './provider';
+import MapSearchControl from './searchcontrol';
+// export { MapSearchProvider, MapSearchControl };  // TODO: need better tool than sed to remove multiline exports (ast parser-emitter maybe)
 
 // @ts-expect-error  // Doesn't like setting attribute on L
-L.SearchProvider = SearchProvider;
+L.MapSearchProvider = MapSearchProvider;
+
+// @ts-expect-error  // Doesn't like setting attribute on L
+L.MapSearchControl = MapSearchControl;

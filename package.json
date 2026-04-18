@@ -24,8 +24,8 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "prepare": "esbuild src/main.ts --bundle --outfile=folium_map_search/folium-map-search.js --external:leaflet --external:leaflet-geosearch --format=esm",
-    "build": "esbuild src/main.ts --bundle --outfile=folium_map_search/folium-map-search.js --external:leaflet --external:leaflet-geosearch --format=esm"
+    "prepare": "esbuild src/main.ts --bundle --outfile=folium_map_search/folium-map-search.js --external:leaflet --external:leaflet-geosearch --format=esm --banner:js='const GeoSearch2=GeoSearch'",
+    "build": "esbuild src/main.ts --bundle --outfile=folium_map_search/folium-map-search.js --external:leaflet --external:leaflet-geosearch --format=esm --banner:js='const GeoSearch2=GeoSearch'"
   },
   "license": "MIT",
   "files": [

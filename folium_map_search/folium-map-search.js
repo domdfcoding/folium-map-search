@@ -1,3 +1,5 @@
+const GeoSearch2=GeoSearch
+
 // src/provider.ts
 
 // src/microfuzz/normalizeText.ts
@@ -211,7 +213,7 @@ function createFuzzySearch(list, options) {
 var microfuzz_default = createFuzzySearch;
 
 // src/provider.ts
-var SearchProvider = class extends GeoSearch.OpenStreetMapProvider {
+var MapSearchProvider = class extends GeoSearch.OpenStreetMapProvider {
   constructor(options) {
     super(options);
     this.map = options.map;
@@ -263,5 +265,24 @@ var SearchProvider = class extends GeoSearch.OpenStreetMapProvider {
   }
 };
 
+// src/searchcontrol.ts
+async function onSubmit(query) {
+  const t = this;
+  t.resultList.clear();
+  const { provider } = t.options;
+  const results = await provider.search(query);
+  if (results && results.length > 0) {
+    t.showResult(results[0], query);
+  }
+  t.close();
+}
+function MapSearchControl(map, ...options) {
+  const search = GeoSearch2.SearchControl(...options);
+  map.on("click", search.close, search);
+  search.onSubmit = onSubmit.bind(search);
+  return search;
+}
+
 // src/main.ts
-L.SearchProvider = SearchProvider;
+L.MapSearchProvider = MapSearchProvider;
+L.MapSearchControl = MapSearchControl;
