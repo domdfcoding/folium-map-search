@@ -67,7 +67,8 @@ export type FuzzySearchStrategy = 'off' | 'smart' | 'aggressive';
 
 export type FuzzySearchOptions = {
 	key?: string;
-	getText?: (arg0: unknown) => Array<string | null>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	getText?: (arg0: any) => Array<string | null>;
 	strategy?: FuzzySearchStrategy;
 };
 

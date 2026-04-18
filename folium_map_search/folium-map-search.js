@@ -148,10 +148,10 @@ function scoreConsecutiveLetters(indices, normalizedItem) {
 }
 function createFuzzySearchImpl(collection, options) {
   const { strategy = "aggressive", getText } = options;
-  var text;
+  let text;
   const preprocessedCollection = collection.map(
     (element) => {
-      var texts;
+      let texts;
       if (getText) {
         texts = getText(element);
       } else {
@@ -206,27 +206,30 @@ function createFuzzySearchImpl(collection, options) {
 
 // src/microfuzz/index.ts
 function createFuzzySearch(list, options) {
-  return createFuzzySearchImpl(list, options);
+  return createFuzzySearchImpl(list, options || {});
 }
 var microfuzz_default = createFuzzySearch;
 
 // src/provider.ts
 var SearchProvider = class extends GeoSearch.OpenStreetMapProvider {
+  constructor(options) {
+    super(options);
+    this.map = options.map;
+    this.layer = options.layer;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   endpoint({ query, type }) {
     const params = typeof query === "string" ? { q: query } : query;
     params.format = "json";
     params.bounded = "1";
     params.viewbox = "-7,49,3,55";
     params.featureType = "settlement";
-    console.log("Nominatum query params:", params);
-    var result = this.getUrl(this.searchUrl, params);
-    console.log("Search results:", result);
-    return result;
+    return this.getUrl(this.searchUrl, params);
   }
   async search(options) {
     if (options.data) {
       if (options.data && options.data.raw instanceof L.Marker) {
-        map.flyTo(options.data.raw.getLatLng(), 18, { animate: false });
+        this.map.flyTo(options.data.raw.getLatLng(), 18, { animate: false });
         setTimeout(() => {
           options.data.raw.openPopup();
         }, 500);
@@ -239,17 +242,18 @@ var SearchProvider = class extends GeoSearch.OpenStreetMapProvider {
     });
     const request = await fetch(url);
     const json = await request.json();
-    var result = this.parse({ data: json });
+    const result = this.parse({ data: json });
     console.log("json:", json, "result:", result);
-    const fuzzySearch = microfuzz_default(marker_cluster_nhle.getLayers(), {
+    const fuzzySearch = microfuzz_default(this.layer.getLayers(), {
       getText: (item) => [item.options.title]
     });
     fuzzySearch(options.query).forEach((item) => {
-      var marker = item.item;
-      var latlng = marker.getLatLng();
+      const marker = item.item;
+      const latlng = marker.getLatLng();
       result.push({
         bounds: null,
         label: marker.options.title,
+        // @ts-expect-error  // Marker doesn't have the right type
         raw: marker,
         x: latlng.lng,
         y: latlng.lat
