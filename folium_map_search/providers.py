@@ -141,7 +141,7 @@ class PdokNlProvider(Provider):
 	pass
 
 
-class MapSearchProvider(Provider):
+class MapSearchProvider(OpenStreetMapProvider):  # noqa: PRM003
 	r"""
 	Custom provider for searching both OpenStreetMap settlements and map markers.
 
@@ -166,7 +166,11 @@ class MapSearchProvider(Provider):
 	_template = Template(
 			"""
 			{% macro script(this, kwargs) %}
-			new L.{{ this.__class__.__name__}}({ map: {{this.map.get_name()}}, layer: {{this.layer.get_name()}} })
+			new L.{{ this.__class__.__name__}}({
+				map: {{this.map.get_name()}},
+				layer: {{this.layer.get_name()}},
+				...{{ this.options | tojson }},
+				})
 			{% endmacro %}
 			""",
 			)
