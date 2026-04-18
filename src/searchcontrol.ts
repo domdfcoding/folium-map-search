@@ -113,5 +113,3 @@ export default function MapSearchControl(options: object) {
 
 	return search;
 }
-
-// TODO: disable enter to search? Override/wrap selectResult

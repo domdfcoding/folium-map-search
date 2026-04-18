@@ -72,14 +72,13 @@ export default class MapSearchProvider extends GeoSearch.OpenStreetMapProvider {
 		const params = typeof query === 'string' ? { q: query } : query;
 		params.format = 'json';
 
-		if (this.viewbox){
+		if (this.viewbox) {
 			params.bounded = '1';
 			params.viewbox = this.viewbox;
 		}
 
 		if (this.featureType) {
 			params.featureType = this.featureType;
-
 		}
 
 		return this.getUrl(this.searchUrl, params);
