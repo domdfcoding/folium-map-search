@@ -28,7 +28,6 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
 import * as GeoSearch from 'leaflet-geosearch';
 import { OpenStreetMapProviderOptions,
 	RawResult } from '../node_modules/leaflet-geosearch/dist/providers/openStreetMapProvider';

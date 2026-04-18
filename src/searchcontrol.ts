@@ -96,15 +96,15 @@ function selectResult(event: KeyboardEvent): void {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function MapSearchControl(map: L.Map, options: object) {
+export default function MapSearchControl(options: object) {
 	// @ts-expect-error  // types
 	const search: SearchControl = GeoSearch.SearchControl(options);
 
-	// Close search box when map clicked.
-	map.on('click', search.close, search);
-
-	// Override onSubmit to close search box after selecting result
-	search.onSubmit = onSubmit.bind(search);
+	// @ts-expect-error  // object member
+	if (options.closeOnSubmit) {
+		// Override onSubmit to close search box after selecting result
+		search.onSubmit = onSubmit.bind(search);
+	}
 
 	// @ts-expect-error  // object member
 	if (options.disableEnterSearch) {

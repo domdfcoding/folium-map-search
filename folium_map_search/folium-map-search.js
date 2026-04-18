@@ -289,10 +289,7 @@ function selectResult(event) {
   }
   const t = this;
   event.preventDefault();
-  L.DomEvent.preventDefault(event);
   if (event.keyCode === ENTER_KEY) {
-    const item2 = t.resultList.select(t.resultList.selected);
-    t.onSubmit({ query: t.searchElement.input.value, data: item2 });
     return;
   }
   const max = t.resultList.count() - 1;
@@ -305,10 +302,11 @@ function selectResult(event) {
   const item = t.resultList.select(idx);
   t.searchElement.input.value = item.label;
 }
-function MapSearchControl(map, options) {
+function MapSearchControl(options) {
   const search = GeoSearch2.SearchControl(options);
-  map.on("click", search.close, search);
-  search.onSubmit = onSubmit.bind(search);
+  if (options.closeOnSubmit) {
+    search.onSubmit = onSubmit.bind(search);
+  }
   if (options.disableEnterSearch) {
     search.selectResult = selectResult.bind(search);
   }

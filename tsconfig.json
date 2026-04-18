@@ -16,6 +16,7 @@
     "noFallthroughCasesInSwitch": true,
     "allowUnreachableCode": false,
     "allowUmdGlobalAccess": true,
+    "skipLibCheck": true,
     "types": [
       "leaflet",
       "leaflet-geosearch"
@@ -23,6 +24,9 @@
   },
   "include": [
     "./src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ],
   "noEmit": true,
   "noEmitOnError": false
