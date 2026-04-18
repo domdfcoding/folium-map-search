@@ -1,15 +1,19 @@
 import * as GeoSearch from 'leaflet-geosearch';
 import { SearchResult } from '../node_modules/leaflet-geosearch/dist/providers/provider';
 import ResultList from '../node_modules/leaflet-geosearch/dist/resultList';
+import SearchElement from '../node_modules/leaflet-geosearch/dist/SearchElement';
+import { ARROW_DOWN_KEY, ARROW_UP_KEY, ENTER_KEY } from '../node_modules/leaflet-geosearch/src/constants';
 
 interface SearchControl {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	options: any; // SearchControlProps
+	searchElement: SearchElement;
 	resultList: ResultList;
 	map: L.Map;
 
 	onSubmit(result: Selection): void | Promise<void>;
 	close(): void;
+	selectResult(event: KeyboardEvent): void;
 	showResult(result: SearchResult, query: Selection): void;
 }
 
@@ -31,16 +35,51 @@ async function onSubmit(query: Selection): Promise<void> {
 	t.close();
 }
 
+function selectResult(event: KeyboardEvent): void {
+	if (
+		[ENTER_KEY, ARROW_DOWN_KEY, ARROW_UP_KEY].indexOf(event.keyCode) === -1
+	) {
+		return;
+	}
+
+	// @ts-expect-error  // this
+	// eslint-disable-next-line @typescript-eslint/no-this-alias
+	const t: SearchControl = this;
+
+	event.preventDefault();
+
+	if (event.keyCode === ENTER_KEY) {
+		return;
+	}
+
+	const max = t.resultList.count() - 1;
+	if (max < 0) {
+		return;
+	}
+
+	const { selected } = t.resultList;
+	const next = event.keyCode === ARROW_DOWN_KEY ? selected + 1 : selected - 1;
+	const idx = next < 0 ? max : next > max ? 0 : next;
+
+	const item = t.resultList.select(idx);
+	t.searchElement.input.value = item.label;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function MapSearchControl(map: L.Map, ...options: any[]) {
+export default function MapSearchControl(map: L.Map, options: object) {
 	// @ts-expect-error  // types
-	const search: SearchControl = GeoSearch.SearchControl(...options);
+	const search: SearchControl = GeoSearch.SearchControl(options);
 
 	// Close search box when map clicked.
 	map.on('click', search.close, search);
 
 	// Override onSubmit to close search box after selecting result
 	search.onSubmit = onSubmit.bind(search);
+
+	// @ts-expect-error  // object member
+	if (options.disableEnterSearch) {
+		search.selectResult = selectResult.bind(search);
+	}
 
 	return search;
 }
