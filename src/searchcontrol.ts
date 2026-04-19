@@ -31,9 +31,10 @@
 import * as GeoSearch from 'leaflet-geosearch';
 import { SearchResult } from '../node_modules/leaflet-geosearch/dist/providers/provider';
 import ResultList from '../node_modules/leaflet-geosearch/dist/resultList';
-import {removeClassName} from '../node_modules/leaflet-geosearch/src/domUtils';
 import SearchElement from '../node_modules/leaflet-geosearch/dist/SearchElement';
-import { ARROW_DOWN_KEY, ARROW_UP_KEY, ENTER_KEY, ESCAPE_KEY, ARROW_LEFT_KEY, ARROW_RIGHT_KEY } from '../node_modules/leaflet-geosearch/src/constants';
+import { ARROW_DOWN_KEY, ARROW_LEFT_KEY, ARROW_RIGHT_KEY, ARROW_UP_KEY, ENTER_KEY,
+	ESCAPE_KEY } from '../node_modules/leaflet-geosearch/src/constants';
+import { removeClassName } from '../node_modules/leaflet-geosearch/src/domUtils';
 
 interface SearchControl {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -99,78 +100,69 @@ function selectResult(event: KeyboardEvent): void {
 	t.searchElement.input.value = item.label;
 }
 
-
 const SPECIAL_KEYS = [
 	ESCAPE_KEY,
 	ARROW_DOWN_KEY,
 	ARROW_UP_KEY,
 	ARROW_LEFT_KEY,
 	ARROW_RIGHT_KEY,
-  ];
-  
+];
 
 async function autoSearch(event: KeyboardEvent) {
-    if (SPECIAL_KEYS.indexOf(event.keyCode) > -1) {
-      return;
-    }
+	if (SPECIAL_KEYS.indexOf(event.keyCode) > -1) {
+		return;
+	}
 
 	// @ts-expect-error  // this
 	// eslint-disable-next-line @typescript-eslint/no-this-alias
 	const t: SearchControl = this;
 
-    const query = (event.target as HTMLInputElement).value;
-    const { provider } = t.options;
+	const query = (event.target as HTMLInputElement).value;
+	const { provider } = t.options;
 
-    if (query.length) {
-      console.log(query)
-      let results = await provider!.search({ query });
-      results = results.slice(0, t.options.maxSuggestions);
-      t.resultList.render(results, t.options.resultFormat);
-    } else {
-      t.resultList.clear();
-    }
-  }
+	if (query.length) {
+		let results = await provider!.search({ query });
+		results = results.slice(0, t.options.maxSuggestions);
+		t.resultList.render(results, t.options.resultFormat);
+	} else {
+		t.resultList.clear();
+	}
+}
 
-
-function onKeyUp(event: KeyboardEvent): void {
+function onKeyUp(_event: KeyboardEvent): void {
 	// Empty body to disable the event handler; all logic moved into clearResutls below.
-  }
-
-
+}
 
 function clearResults(event: KeyboardEvent | null, force = false) {
-    if (event && event.keyCode !== ESCAPE_KEY) {
-      return;
-    }
-
+	if (event && event.keyCode !== ESCAPE_KEY) {
+		return;
+	}
 
 	// @ts-expect-error  // this
 	// eslint-disable-next-line @typescript-eslint/no-this-alias
 	const t: SearchControl = this;
 
-    const { keepResult, autoComplete } = t.options;
+	const { keepResult, autoComplete } = t.options;
 
-	if (t.searchElement.input.value === ''){
+	if (t.searchElement.input.value === '') {
 		// Already empty; close
 		removeClassName(t.searchElement.container, ['pending', 'active']);
 
 		t.searchElement.input.value = '';
-	
+
 		document.body.focus();
-		document.body.blur();	
+		document.body.blur();
 	} else {
+		if (force || !keepResult) {
+			t.searchElement.input.value = '';
+			t.markers.clearLayers();
+		}
 
-
-    if (force || !keepResult) {
-      t.searchElement.input.value = '';
-      t.markers.clearLayers();
-    }
-
-    if (autoComplete) {
-      t.resultList.clear();
-    }
+		if (autoComplete) {
+			t.resultList.clear();
+		}
+	}
 }
-  }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function MapSearchControl(options: object) {
@@ -184,7 +176,7 @@ export default function MapSearchControl(options: object) {
 	}
 
 	// Fix esc key handling. Once clears form contents, 2nd closes (or first closes if empty)
-	search.searchElement.onKeyUp = onKeyUp.bind(search.searchElement)
+	search.searchElement.onKeyUp = onKeyUp.bind(search.searchElement);
 	search.clearResults = clearResults.bind(search);
 
 	// @ts-expect-error  // object member

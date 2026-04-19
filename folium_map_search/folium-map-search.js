@@ -273,6 +273,14 @@ var MapSearchProvider = class extends GeoSearch.OpenStreetMapProvider {
 
 // src/searchcontrol.ts
 
+// node_modules/leaflet-geosearch/src/constants.ts
+var ENTER_KEY = 13;
+var ESCAPE_KEY = 27;
+var ARROW_DOWN_KEY = 40;
+var ARROW_UP_KEY = 38;
+var ARROW_LEFT_KEY = 37;
+var ARROW_RIGHT_KEY = 39;
+
 // node_modules/leaflet-geosearch/src/domUtils.ts
 function removeClassName(element, className) {
   if (!element || !element.classList) {
@@ -285,14 +293,6 @@ function removeClassName(element, className) {
     }
   });
 }
-
-// node_modules/leaflet-geosearch/src/constants.ts
-var ENTER_KEY = 13;
-var ESCAPE_KEY = 27;
-var ARROW_DOWN_KEY = 40;
-var ARROW_UP_KEY = 38;
-var ARROW_LEFT_KEY = 37;
-var ARROW_RIGHT_KEY = 39;
 
 // src/searchcontrol.ts
 async function onSubmit(query) {
@@ -339,7 +339,6 @@ async function autoSearch(event) {
   const query = event.target.value;
   const { provider } = t.options;
   if (query.length) {
-    console.log(query);
     let results = await provider.search({ query });
     results = results.slice(0, t.options.maxSuggestions);
     t.resultList.render(results, t.options.resultFormat);
@@ -347,7 +346,7 @@ async function autoSearch(event) {
     t.resultList.clear();
   }
 }
-function onKeyUp(event) {
+function onKeyUp(_event) {
 }
 function clearResults(event, force = false) {
   if (event && event.keyCode !== ESCAPE_KEY) {
