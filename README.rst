@@ -59,7 +59,7 @@ folium-map-search
 .. |language| image:: https://img.shields.io/github/languages/top/domdfcoding/folium-map-search
 	:alt: GitHub top language
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/domdfcoding/folium-map-search/v0.1.0b1
+.. |commits-since| image:: https://img.shields.io/github/commits-since/domdfcoding/folium-map-search/v0.1.0b2
 	:target: https://github.com/domdfcoding/folium-map-search/pulse
 	:alt: GitHub commits since tagged version
 
