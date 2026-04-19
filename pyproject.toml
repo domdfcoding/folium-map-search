@@ -29,7 +29,10 @@ python-implementations = [ "CPython",]
 platforms = [ "Windows", "macOS", "Linux",]
 license-key = "MIT"
 package = "folium_map_search"
-additional-files = [ "include folium_map_search/folium-map-search.js",]
+additional-files = [
+    "include folium_map_search/folium-map-search.js",
+    "include folium_map_search/folium-map-search.js.map",
+]
 
 [tool.importcheck]
 

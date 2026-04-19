@@ -386,3 +386,4 @@ function MapSearchControl(options) {
 // src/main.ts
 L.MapSearchProvider = MapSearchProvider;
 L.MapSearchControl = MapSearchControl;
+//# sourceMappingURL=folium-map-search.js.map
