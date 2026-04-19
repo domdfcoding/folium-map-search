@@ -32,7 +32,7 @@ import * as GeoSearch from 'leaflet-geosearch';
 import { SearchResult } from '../node_modules/leaflet-geosearch/dist/providers/provider';
 import ResultList from '../node_modules/leaflet-geosearch/dist/resultList';
 import SearchElement from '../node_modules/leaflet-geosearch/dist/SearchElement';
-import { ARROW_DOWN_KEY, ARROW_UP_KEY, ENTER_KEY } from '../node_modules/leaflet-geosearch/src/constants';
+import { ARROW_DOWN_KEY, ARROW_UP_KEY, ENTER_KEY, ESCAPE_KEY, ARROW_LEFT_KEY, ARROW_RIGHT_KEY } from '../node_modules/leaflet-geosearch/src/constants';
 
 interface SearchControl {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,6 +43,7 @@ interface SearchControl {
 
 	onSubmit(result: Selection): void | Promise<void>;
 	close(): void;
+	autoSearch(event: KeyboardEvent): void;
 	selectResult(event: KeyboardEvent): void;
 	showResult(result: SearchResult, query: Selection): void;
 }
@@ -95,6 +96,37 @@ function selectResult(event: KeyboardEvent): void {
 	t.searchElement.input.value = item.label;
 }
 
+
+const SPECIAL_KEYS = [
+	ESCAPE_KEY,
+	ARROW_DOWN_KEY,
+	ARROW_UP_KEY,
+	ARROW_LEFT_KEY,
+	ARROW_RIGHT_KEY,
+  ];
+  
+
+async function autoSearch(event: KeyboardEvent) {
+    if (SPECIAL_KEYS.indexOf(event.keyCode) > -1) {
+      return;
+    }
+
+	// @ts-expect-error  // this
+	// eslint-disable-next-line @typescript-eslint/no-this-alias
+	const t: SearchControl = this;
+
+    const query = (event.target as HTMLInputElement).value;
+    const { provider } = t.options;
+
+    if (query.length) {
+      console.log(query)
+      let results = await provider!.search({ query });
+      results = results.slice(0, t.options.maxSuggestions);
+      t.resultList.render(results, t.options.resultFormat);
+    } else {
+      t.resultList.clear();
+    }
+  }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function MapSearchControl(options: object) {
 	// @ts-expect-error  // types
@@ -109,6 +141,7 @@ export default function MapSearchControl(options: object) {
 	// @ts-expect-error  // object member
 	if (options.disableEnterSearch) {
 		search.selectResult = selectResult.bind(search);
+		search.autoSearch = autoSearch.bind(search);
 	}
 
 	return search;
