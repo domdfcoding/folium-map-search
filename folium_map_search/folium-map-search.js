@@ -273,6 +273,19 @@ var MapSearchProvider = class extends GeoSearch.OpenStreetMapProvider {
 
 // src/searchcontrol.ts
 
+// node_modules/leaflet-geosearch/src/domUtils.ts
+function removeClassName(element, className) {
+  if (!element || !element.classList) {
+    return;
+  }
+  const classNames = Array.isArray(className) ? className : [className];
+  classNames.forEach((name) => {
+    if (element.classList.contains(name)) {
+      element.classList.remove(name);
+    }
+  });
+}
+
 // node_modules/leaflet-geosearch/src/constants.ts
 var ENTER_KEY = 13;
 var ESCAPE_KEY = 27;
@@ -334,11 +347,36 @@ async function autoSearch(event) {
     t.resultList.clear();
   }
 }
+function onKeyUp(event) {
+}
+function clearResults(event, force = false) {
+  if (event && event.keyCode !== ESCAPE_KEY) {
+    return;
+  }
+  const t = this;
+  const { keepResult, autoComplete } = t.options;
+  if (t.searchElement.input.value === "") {
+    removeClassName(t.searchElement.container, ["pending", "active"]);
+    t.searchElement.input.value = "";
+    document.body.focus();
+    document.body.blur();
+  } else {
+    if (force || !keepResult) {
+      t.searchElement.input.value = "";
+      t.markers.clearLayers();
+    }
+    if (autoComplete) {
+      t.resultList.clear();
+    }
+  }
+}
 function MapSearchControl(options) {
   const search = GeoSearch2.SearchControl(options);
   if (options.closeOnSubmit) {
     search.onSubmit = onSubmit.bind(search);
   }
+  search.searchElement.onKeyUp = onKeyUp.bind(search.searchElement);
+  search.clearResults = clearResults.bind(search);
   if (options.disableEnterSearch) {
     search.selectResult = selectResult.bind(search);
     search.autoSearch = autoSearch.bind(search);
