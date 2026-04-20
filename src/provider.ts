@@ -107,14 +107,14 @@ export default class MapSearchProvider extends GeoSearch.OpenStreetMapProvider {
 		const result = this.parse({ data: json });
 		console.log('json:', json, 'result:', result);
 		const fuzzySearch = createFuzzySearch(this.layer.getLayers(), {
-			getText: (item: L.Marker): string[] => [item.options.title!],
+			getText: (item: L.Marker): string[] => [getSearchName(item)],
 		});
 		fuzzySearch(options.query).forEach((item) => {
 			const marker: L.Marker = item.item as L.Marker;
 			const latlng = marker.getLatLng();
 			result.push({
 				bounds: null,
-				label: marker.options.title!,
+				label: getSearchName(marker),
 				// @ts-expect-error  // Marker doesn't have the right type
 				raw: marker,
 				x: latlng.lng,
@@ -123,4 +123,15 @@ export default class MapSearchProvider extends GeoSearch.OpenStreetMapProvider {
 		});
 		return result;
 	}
+}
+
+function getSearchName(marker: L.Marker): string {
+	// @ts-expect-error  // Doesn't like custom options
+	const searchName = marker.options.searchName;
+
+	if (searchName) {
+		return searchName;
+	}
+
+	return marker.options.title!;
 }

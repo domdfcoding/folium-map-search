@@ -253,14 +253,14 @@ var MapSearchProvider = class extends GeoSearch.OpenStreetMapProvider {
     const result = this.parse({ data: json });
     console.log("json:", json, "result:", result);
     const fuzzySearch = microfuzz_default(this.layer.getLayers(), {
-      getText: (item) => [item.options.title]
+      getText: (item) => [getSearchName(item)]
     });
     fuzzySearch(options.query).forEach((item) => {
       const marker = item.item;
       const latlng = marker.getLatLng();
       result.push({
         bounds: null,
-        label: marker.options.title,
+        label: getSearchName(marker),
         // @ts-expect-error  // Marker doesn't have the right type
         raw: marker,
         x: latlng.lng,
@@ -270,6 +270,13 @@ var MapSearchProvider = class extends GeoSearch.OpenStreetMapProvider {
     return result;
   }
 };
+function getSearchName(marker) {
+  const searchName = marker.options.searchName;
+  if (searchName) {
+    return searchName;
+  }
+  return marker.options.title;
+}
 
 // src/searchcontrol.ts
 
