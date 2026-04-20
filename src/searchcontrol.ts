@@ -185,5 +185,8 @@ export default function MapSearchControl(options: object) {
 		search.autoSearch = autoSearch.bind(search);
 	}
 
+	// Set proper value
+	search.searchElement.form.autocomplete = 'off';
+
 	return search;
 }

@@ -387,6 +387,7 @@ function MapSearchControl(options) {
     search.selectResult = selectResult.bind(search);
     search.autoSearch = autoSearch.bind(search);
   }
+  search.searchElement.form.autocomplete = "off";
   return search;
 }
 
