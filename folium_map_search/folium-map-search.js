@@ -242,6 +242,9 @@ var MapSearchProvider = class extends GeoSearch.OpenStreetMapProvider {
           options.data.raw.openPopup();
         }, 500);
         return [];
+      } else if (options.data.raw) {
+        this.map.flyTo([options.data.raw.lat, options.data.raw.lon], 14, { animate: false });
+        return [];
       }
     }
     const url = this.endpoint({
