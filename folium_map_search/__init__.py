@@ -160,7 +160,7 @@ class MapSearchControl(folium.elements.JSCSSMixin, folium.elements.MacroElement)
 					),
 			(
 					"folium-map-search_js",
-					f"https://cdn.jsdelivr.net/gh/domdfcoding/folium-map-search@v{__version__}/folium_map_search/folium-map-search.min.js",
+					f"https://cdn.jsdelivr.net/gh/domdfcoding/folium-map-search@v{__version__}/folium_map_search/folium-map-search.bundle.min.js",
 					),
 			]
 

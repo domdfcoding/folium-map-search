@@ -26,8 +26,8 @@ additional_ignore:
  - node_modules
 
 manifest_additional:
-  - include folium_map_search/folium-map-search.js
-  - include folium_map_search/folium-map-search.js.map
+  - include folium_map_search/*.js
+  - include folium_map_search/*.js.map
 
 exclude_files:
   - justfile

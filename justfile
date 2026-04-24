@@ -32,9 +32,17 @@ build:
 	tox -e build
 
 js:
-	npm run build
-	sed -i -n '/^import/!p' folium_map_search/folium-map-search.js
-	sed -i -n '/^export/!p' folium_map_search/folium-map-search.js
+	npx esbuild src/main.ts --bundle --outfile=folium_map_search/folium-map-search.js "--external:./src/microfuzz/*.ts" --external:leaflet --external:leaflet-geosearch --format=esm --banner:js='const GeoSearch2=GeoSearch' --sourcemap
+	sed -i '/^import/s/^/\/\//' folium_map_search/folium-map-search.js
+	sed -i '/^export/s/^/\/\//' folium_map_search/folium-map-search.js
+
+	npx esbuild src/microfuzz/index.ts --bundle --outfile=folium_map_search/microfuzz.js --format=esm --sourcemap
+	sed -i '/^import/s/^/\/\//' folium_map_search/microfuzz.js
+	sed -i '/^export/s/^/\/\//' folium_map_search/microfuzz.js
+
+	npx esbuild src/main.ts --bundle --outfile=folium_map_search/folium-map-search.bundle.js --external:leaflet --external:leaflet-geosearch --format=esm --banner:js='const GeoSearch2=GeoSearch' --sourcemap
+	sed -i '/^import/s/^/\/\//' folium_map_search/folium-map-search.bundle.js
+	sed -i '/^export/s/^/\/\//' folium_map_search/folium-map-search.bundle.js
 
 
 licence-report:
