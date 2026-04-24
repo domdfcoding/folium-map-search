@@ -4,7 +4,7 @@ build-backend = "whey"
 
 [project]
 name = "folium-map-search"
-version = "0.1.0b5"
+version = "0.1.0b6"
 description = "Adds a control to search for major places on the map and for map markers."
 readme = "README.rst"
 keywords = []
